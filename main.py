@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow as tf  # Added for disabling eager execution
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from tensorflow.keras.applications import ResNet50, VGG16
 from tensorflow.keras.applications.resnet50 import preprocess_input as preprocess_resnet
 from tensorflow.keras.applications.vgg16 import preprocess_input as preprocess_vgg
@@ -9,7 +10,7 @@ from art.estimators.classification import KerasClassifier
 from art.attacks.evasion import FastGradientMethod, CarliniL2Method, ProjectedGradientDescent
 from tensorflow.keras.datasets import cifar10
 
-# Disable TensorFlow eager execution
+# Disable TensorFlow eager execution (necessary for ART with TensorFlow 2.x)
 tf.compat.v1.disable_eager_execution()
 
 # Load CIFAR-10 dataset
@@ -37,8 +38,8 @@ def get_model(model_name="ResNet50"):
 model_name = "ResNet50"  # Change to "VGG16" if desired
 model, preprocess_input = get_model(model_name)
 
-# Initialize ART classifier
-art_classifier = KerasClassifier(model=model, clip_values=(0, 1), preprocessing=(0.5, 0.5))
+# Pass preprocessing as None or a tuple (for example, (0.5, 0.5) for normalization)
+art_classifier = KerasClassifier(model=model, preprocessing=preprocess_input)
 
 # Adversarial attack examples
 def generate_adversarial_examples(attack_method, x, y):

@@ -9,6 +9,7 @@ keras = "*"
 numpy = "*"
 matplotlib = "*"
 adversarial-robustness-toolbox = "*"
+scikeras = "*"
 
 [dev-packages]
 ipykernel = "*"
